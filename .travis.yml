@@ -33,6 +33,7 @@ install:
 # Generate the build scripts using CMake.
 #
 before_script:
+- rvm get head # https://github.com/travis-ci/travis-ci/issues/6307
 - mkdir llvm-build
 - cd llvm-build
 - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD="host"
