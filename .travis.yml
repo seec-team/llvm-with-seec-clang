@@ -1,18 +1,41 @@
 language: cpp
 
-#
-# We need a more recent version of GCC to build.
-#
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-4.8
-    - g++-4.8
+# Get more modern versions of GCC and Clang to build with on Linux.
+# c.f. http://genbattle.bitbucket.org/blog/2016/01/17/c++-travis-ci/
+matrix:
+  include:
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.6
+          packages:
+            - clang-3.6
+      env: 
+        - COMPILER_CXX=clang++-3.6
+        - COMPILER_CC=clang-3.6
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.8
+            - g++-4.8
+      env: 
+        - COMPILER_CXX=g++-4.8
+        - COMPILER_CC=gcc-4.8
+    - os: osx
+      compiler: clang
+      env: 
+        - COMPILER_CXX=clang++
+        - COMPILER_CC=clang
 
 before_install:
-- if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+  - export CXX="${COMPILER_CXX}" CC="${COMPILER_CC}"
 
 # 
 # LLVM needs a more recent version of CMake. This code comes from the following
@@ -74,15 +97,6 @@ after_success:
   cd ${TRAVIS_BUILD_DIR}
   SEEC_BUILT_XZ_FILENAME="seec_llvm_travis_build_${TRAVIS_OS_NAME}_${CC}.tar.xz"
   tar -cJf ${TRAVIS_BUILD_DIR}/${SEEC_BUILT_XZ_FILENAME} -C ${TRAVIS_BUILD_DIR}/llvm-install .
-
-matrix:
-  include:
-  - os: linux
-    compiler: clang
-  - os: linux
-    compiler: gcc
-  - os: osx
-    compiler: clang
 
 #
 # For tagged releases, push the compressed install directory to GitHub.
