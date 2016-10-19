@@ -34,8 +34,8 @@ install:
 #
 before_script:
 - rvm get head # https://github.com/travis-ci/travis-ci/issues/6307
-- mkdir llvm-build
-- cd llvm-build
+- mkdir ${TRAVIS_BUILD_DIR}/llvm-build
+- cd ${TRAVIS_BUILD_DIR}/llvm-build
 - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD="host"
   -DLLVM_BUILD_TOOLS=true -DLLVM_ENABLE_EH=true -DLLVM_ENABLE_PIC=true -DLLVM_ENABLE_RTTI=true
   -DLLVM_INCLUDE_TESTS=false -DLLVM_TOOL_BUGPOINT_BUILD=false -DLLVM_TOOL_BUGPOINT_PASSES_BUILD=false
