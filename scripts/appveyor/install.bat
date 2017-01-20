@@ -16,5 +16,5 @@ IF %COMPILER%==msys2 (
   SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
 
   REM build tools and dependencies
-  bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain tar"
+  bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-clang mingw-w64-x86_64-libc++ "
 )
