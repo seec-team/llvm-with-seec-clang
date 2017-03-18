@@ -110,5 +110,5 @@ deploy:
   on:
     tags: true
     repo: seec-team/llvm-with-seec-clang
-    branch: release_39_travis
+    branch: release_40_travis
 
