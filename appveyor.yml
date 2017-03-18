@@ -1,4 +1,4 @@
-version: '3.9.0.{build}'
+version: '4.0.0.{build}'
 
 environment:
   matrix:
@@ -14,4 +14,4 @@ build_script:
   - '%APPVEYOR_BUILD_FOLDER%\scripts\appveyor\build.bat'
 
 artifacts:
-  - path: llvm_install_3.9.0.zip
+  - path: llvm_install_4.0.0.zip
