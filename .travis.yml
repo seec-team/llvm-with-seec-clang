@@ -1,33 +1,19 @@
 language: cpp
 
-# Get more modern versions of GCC and Clang to build with on Linux.
-# c.f. http://genbattle.bitbucket.org/blog/2016/01/17/c++-travis-ci/
 matrix:
   include:
     - os: linux
+      dist: trusty
       compiler: clang
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
-          packages:
-            - clang-3.6
       env: 
-        - COMPILER_CXX=clang++-3.6
-        - COMPILER_CC=clang-3.6
+        - COMPILER_CXX=clang++
+        - COMPILER_CC=clang
     - os: linux
+      dist: trusty
       compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-4.8
-            - g++-4.8
-      env: 
-        - COMPILER_CXX=g++-4.8
-        - COMPILER_CC=gcc-4.8
+      env:
+        - COMPILER_CXX=g++
+        - COMPILER_CC=gcc
     - os: osx
       compiler: clang
       env: 
@@ -36,21 +22,6 @@ matrix:
 
 before_install:
   - export CXX="${COMPILER_CXX}" CC="${COMPILER_CC}"
-
-# 
-# LLVM needs a more recent version of CMake. This code comes from the following
-# answer about installing an updated CMake:
-#   http://stackoverflow.com/a/33203355
-#
-install:
-- DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-- mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
-- |
-  if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-    CMAKE_URL="http://www.cmake.org/files/v3.4/cmake-3.4.3-Linux-x86_64.tar.gz"
-    mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-    export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-  fi
 
 #
 # Generate the build scripts using CMake.
