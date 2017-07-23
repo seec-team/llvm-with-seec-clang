@@ -68,6 +68,18 @@ install:
     CMAKE_URL="http://www.cmake.org/files/v3.4/cmake-3.4.3-Linux-x86_64.tar.gz"
     mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
     export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+
+    NINJA_URL="https://github.com/ninja-build/ninja/releases/download/v1.7.2/ninja-linux.zip"
+    mkdir ninja
+    travis_retry wget --no-check-certificate --quiet -O ninja.zip ${NINJA_URL}; unzip -u -d ninja ninja.zip
+
+    CMAKE_GENERATOR="Ninja"
+    EXTRA_CMAKE_ARGUMENTS="-DCMAKE_MAKE_PROGRAM=${DEPS_DIR}/ninja/ninja"
+    THE_MAKE_COMMAND="${DEPS_DIR}/ninja/ninja"
+  else
+    CMAKE_GENERATOR="Unix Makefiles"
+    EXTRA_CMAKE_ARGUMENTS=""
+    THE_MAKE_COMMAND="make -j3"
   fi
 
 #
@@ -77,8 +89,8 @@ before_script:
 - rvm get head # https://github.com/travis-ci/travis-ci/issues/6307
 - mkdir ${TRAVIS_BUILD_DIR}/llvm-build
 - cd ${TRAVIS_BUILD_DIR}/llvm-build
-- cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD="host"
-  -DLLVM_BUILD_TOOLS=true -DLLVM_ENABLE_EH=true -DLLVM_ENABLE_PIC=true -DLLVM_ENABLE_RTTI=true
+- cmake -G ${CMAKE_GENERATOR} ${EXTRA_CMAKE_ARGUMENTS} -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD="host"
+  -DLLVM_BUILD_TOOLS=true -DLLVM_ENABLE_EH=true -DLLVM_ENABLE_PIC=true -DLLVM_ENABLE_RTTI=true -DLLVM_INCLUDE_EXAMPLES=false
   -DLLVM_INCLUDE_TESTS=false -DLLVM_TOOL_BUGPOINT_BUILD=false -DLLVM_TOOL_BUGPOINT_PASSES_BUILD=false
   -DLLVM_TOOL_CLANG_BUILD=false -DLLVM_TOOL_DSYMUTIL_BUILD=false -DLLVM_TOOL_GOLD_BUILD=false
   -DLLVM_TOOL_LLC_BUILD=false -DLLVM_TOOL_LLI_BUILD=false -DLLVM_TOOL_LLVM_AR_BUILD=false
@@ -102,7 +114,7 @@ before_script:
 #
 script:
 - cd ${TRAVIS_BUILD_DIR}/llvm-build
-- make -j3
+- ${THE_MAKE_COMMAND}
 
 #
 # Install, then compress the install directory for deployment.
