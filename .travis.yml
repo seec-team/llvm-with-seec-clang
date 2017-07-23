@@ -75,9 +75,11 @@ install:
 
     CMAKE_GENERATOR="Ninja"
     EXTRA_CMAKE_ARGUMENTS="-DCMAKE_MAKE_PROGRAM=${DEPS_DIR}/ninja/ninja"
+    CMAKE_BUILD_COMMAND="cmake --build ."
   else
     CMAKE_GENERATOR="Unix Makefiles"
     EXTRA_CMAKE_ARGUMENTS=""
+    CMAKE_BUILD_COMMAND="make -j3"
   fi
 
 #
@@ -113,7 +115,7 @@ before_script:
 #
 script:
 - cd ${TRAVIS_BUILD_DIR}/llvm-build
-- cmake --build .
+- ${CMAKE_BUILD_COMMAND}
 
 #
 # Install, then compress the install directory for deployment.
