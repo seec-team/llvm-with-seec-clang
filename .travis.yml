@@ -75,11 +75,9 @@ install:
 
     CMAKE_GENERATOR="Ninja"
     EXTRA_CMAKE_ARGUMENTS="-DCMAKE_MAKE_PROGRAM=${DEPS_DIR}/ninja/ninja"
-    THE_MAKE_COMMAND="${DEPS_DIR}/ninja/ninja"
   else
     CMAKE_GENERATOR="Unix Makefiles"
     EXTRA_CMAKE_ARGUMENTS=""
-    THE_MAKE_COMMAND="make -j3"
   fi
 
 #
@@ -107,6 +105,7 @@ before_script:
   -DLLVM_TOOL_MSBUILD_BUILD=false -DLLVM_TOOL_OBJ2YAML_BUILD=false -DLLVM_TOOL_OPT_BUILD=false
   -DLLVM_TOOL_SANCOV_BUILD=false -DLLVM_TOOL_SANSTATS_BUILD=false -DLLVM_TOOL_VERIFY_USELISTORDER_BUILD=false
   -DLLVM_TOOL_XCODE_TOOLCHAIN_BUILD=false -DLLVM_TOOL_YAML2OBJ_BUILD=false -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/llvm-install
+  -DLLVM_PARALLEL_COMPILE_JOBS=3 -DLLVM_PARALLEL_LINK_JOBS=2
   ${TRAVIS_BUILD_DIR}
 
 #
@@ -114,7 +113,7 @@ before_script:
 #
 script:
 - cd ${TRAVIS_BUILD_DIR}/llvm-build
-- ${THE_MAKE_COMMAND}
+- cmake --build .
 
 #
 # Install, then compress the install directory for deployment.
@@ -123,7 +122,7 @@ after_success:
 - |
   mkdir -p ${TRAVIS_BUILD_DIR}/llvm-install
   cd ${TRAVIS_BUILD_DIR}/llvm-build
-  make install
+  cmake --build . --target install
   cd ${TRAVIS_BUILD_DIR}
   SEEC_BUILT_XZ_FILENAME="seec_llvm_travis_build_${TRAVIS_OS_NAME}_${CC}.tar.xz"
   tar -cJf ${TRAVIS_BUILD_DIR}/${SEEC_BUILT_XZ_FILENAME} -C ${TRAVIS_BUILD_DIR}/llvm-install .
