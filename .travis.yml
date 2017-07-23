@@ -102,7 +102,7 @@ install:
 # Generate the build scripts using CMake.
 #
 before_script:
-- rvm get head # https://github.com/travis-ci/travis-ci/issues/6307
+- rvm get stable # https://github.com/travis-ci/travis-ci/issues/6307
 - mkdir ${TRAVIS_BUILD_DIR}/llvm-build
 - cd ${TRAVIS_BUILD_DIR}/llvm-build
 - cmake -G "${CMAKE_GENERATOR}" ${EXTRA_CMAKE_ARGUMENTS} -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD="host"
