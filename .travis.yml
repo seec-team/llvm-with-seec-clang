@@ -54,13 +54,6 @@ matrix:
         - COMPILER_CXX=clang++
         - COMPILER_CC=clang
     - os: osx
-      osx_image: xcode8.3
-      compiler: clang
-      env: 
-        - THE_OSX_IMAGE=xcode8.3
-        - COMPILER_CXX=clang++
-        - COMPILER_CC=clang
-    - os: osx
       osx_image: xcode9
       compiler: clang
       env: 
