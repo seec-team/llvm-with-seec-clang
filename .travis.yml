@@ -47,8 +47,24 @@ matrix:
         - COMPILER_CXX=g++-7
         - COMPILER_CC=gcc-7
     - os: osx
+      osx_image: xcode7.3
       compiler: clang
       env: 
+        - THE_OSX_IMAGE=xcode7.3
+        - COMPILER_CXX=clang++
+        - COMPILER_CC=clang
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      env: 
+        - THE_OSX_IMAGE=xcode8.3
+        - COMPILER_CXX=clang++
+        - COMPILER_CC=clang
+    - os: osx
+      osx_image: xcode9
+      compiler: clang
+      env: 
+        - THE_OSX_IMAGE=xcode9
         - COMPILER_CXX=clang++
         - COMPILER_CC=clang
 
@@ -126,7 +142,11 @@ after_success:
   cd ${TRAVIS_BUILD_DIR}/llvm-build
   cmake --build . --target install
   cd ${TRAVIS_BUILD_DIR}
-  SEEC_BUILT_XZ_FILENAME="seec_llvm_travis_build_${TRAVIS_OS_NAME}_${CC}.tar.xz"
+  if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+    SEEC_BUILT_XZ_FILENAME="seec_llvm_travis_build_${TRAVIS_OS_NAME}_${THE_OSX_IMAGE}_${CC}.tar.xz"
+  else
+    SEEC_BUILT_XZ_FILENAME="seec_llvm_travis_build_${TRAVIS_OS_NAME}_${CC}.tar.xz"
+  fi
   tar -cJf ${TRAVIS_BUILD_DIR}/${SEEC_BUILT_XZ_FILENAME} -C ${TRAVIS_BUILD_DIR}/llvm-install .
 
 #
