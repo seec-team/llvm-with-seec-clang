@@ -154,5 +154,5 @@ deploy:
   on:
     tags: true
     repo: seec-team/llvm-with-seec-clang
-    branch: release_40_travis
+    branch: release_60_travis
 
