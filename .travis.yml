@@ -2,6 +2,24 @@ language: cpp
 
 matrix:
   include:
+    - os: linux
+      dist: bionic
+      compiler: clang
+      env:
+        - COMPILER_CXX=clang++
+        - COMPILER_CC=clang
+    - os: linux
+      dist: bionic
+      compiler: gcc
+    - os: linux
+      dist: xenial
+      compiler: clang
+      env:
+        - COMPILER_CXX=clang++
+        - COMPILER_CC=clang
+    - os: linux
+      dist: xenial
+      compiler: gcc
     - os: osx
       osx_image: xcode7.3
       compiler: clang
